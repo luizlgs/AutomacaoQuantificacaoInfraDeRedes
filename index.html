@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulário de Dados de Infraestrutura</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding-top: 50px;
+            margin: 0;
+            background-color: #f5f5f5;
+        }
+
+        .form-container {
+            width: 90%;
+            max-width: 1200px;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .form-section {
+            flex: 1;
+            min-width: 300px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333333;
+            width: 100%;
+        }
+
+        .form-section h3 {
+            color: #4CAF50;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 5px;
+        }
+
+        label {
+            font-weight: bold;
+            margin-top: 10px;
+            color: #333333;
+        }
+
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 8px;
+            margin: 8px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .radio-group {
+            display: flex;
+            justify-content: space-between;
+            margin: 8px 0;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+
+        .submit-btn:hover {
+            background-color: #45a049;
+        }
+
+        .backbone-secundario {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div style="width: 40%;" id="divprincipal" class="form-container">
+        <h2>Automação da quantificação de dados de infraestrutura</h2>
+        
+        <div class="form-section">
+            <h3>Malha Horizontal</h3>
+
+            <label>Cálculo de matériais para:</label>
+                <div class="radio-group">
+                    <label><input type="radio" name="andarunicooutipo" value=1 onclick="toggleNPavimentos(true)" required>Andares tipo</label>
+                    <label><input type="radio" name="andarunicooutipo" value=0 onclick="toggleNPavimentos(false)" checked="checked" required>Andar único</label>
+                </div>
+
+            <label for="pavimentos" id="label-pavimentos" style="display: none;">Número de andares tipo da edificação:</label>
+            <input type="number" id="pavimentos" name="pavimentos" min="0" style="display: none;" value="1" required>
+
+            <label id="labelapenasBackbone" style="display: none;">Calcular apenas o backbone
+                <div class="radio-group">
+                    <label><input type="radio" name="apenasBackbone" value=1 onclick="toggleapenasBackbone(true)" required>Sim</label>
+                    <label><input type="radio" name="apenasBackbone" value=0 checked= "checked" onclick="toggleapenasBackbone(false)" required>Não</label>
+                </div>
+            </label>
+
+
+            <label id="labelDisciplinas">Separar pontos de telecom por disciplinas</label>
+                <div class="radio-group" id="divDisciplinas">
+                    <label><input type="radio" name="disciplinas" value=1 onclick="toggleDisciplinas(true)" required>Sim</label>
+                    <label><input type="radio" name="disciplinas" value=0 onclick="toggleDisciplinas(false)" checked="checked" required>Não</label>
+                </div>
+
+            <label for="totalTelecom" id="label-total">Total de pontos de telecom:</label>
+            <input type="number" id="totalTelecom" name="totalTelecom" min="0" value="" required>
+
+            <label for="dados" id="dadoslabel" style="display: none;">Quantidade de pontos de telecom para dados no andar:</label>
+            <input type="number" id="dados" name="dados" min="0" style="display: none;" value=0 required>
+
+            <label for="cftv" id="cftvlabel" style="display: none;">Quantidade de telecom para CFTV no andar:</label>
+            <input type="number" id="cftv" name="cftv" min="0" style="display: none;" value=0 required>
+
+            <label for="voip" id="voiplabel" style="display: none;">Quantidade de telecom para Voip no andar:</label>
+            <input type="number" id="voip" name="voip" min="0" style="display: none;" value=0 required>
+
+            <label for="distanciaMH">Medida básica para cálculo da distância da MH:</label>
+            <input type="number" id="distanciaMH" name="distanciaMH" min="0" required>
+
+            <label for="categoria" id="labelCategoria">Especificação de categoria:</label>
+            <select id="categoria" name="categoria" required>
+                <option value="">Selecione</option>
+                <option value="Cat5">Cat5</option>
+                <option value="Cat5e">Cat5e</option>
+                <option value="Cat6">Cat6</option>
+                <option value="Cat6A">Cat6A</option>
+                <option value="Cat7">Cat7</option>
+            </select>
+
+            <label for="rack">Rack está protegido?</label>
+            <select id="rack" name="rack" required>
+                <option value="">Selecione</option>
+                <option value=1>Sim</option>
+                <option value=0>Não</option>
+            </select>
+
+            <label>Verificação da existência de backbone secundário:</label>
+            <div class="radio-group">
+                <label><input type="radio" name="backboneExistente" value=1 onclick="toggleBackboneSecundario(true)" required>Sim</label>
+                <label><input id="nao" type="radio" name="backboneExistente" value=0 checked= "checked" onclick="toggleBackboneSecundario(false)" required>Não</label>
+            </div>
+
+        </div>
+
+        <div id="backboneprimarioexistente" style="display: none;" class="form-section">
+            <h3 id="bp">Backbone Primário</h3>
+
+            <label for="paresFibras">Número de pares de fibras que ficarão disponíveis:</label>
+            <input type="number" id="paresFibras" name="paresFibras" min="0" value="0" required>
+
+            <label for="distanciaBackbone">Medida básica para cálculo dos lances de cabo backbone:</label>
+            <input type="number" id="distanciaBackbone" name="distanciaBackbone" value="0" min="0" required>
+
+            <label for="caboFibra">Especificação do cabo de fibra óptica:</label>
+            <select id="caboFibra" name="caboFibra" required>
+                <option value=2>Multimodo</option>
+                <option value=1>Monomodo</option>
+            </select>
+
+            <label for="caracteristicaFibra">Característica da fibra óptica:</label>
+            <select id="caracteristicaFibra" name="caracteristicaFibra" required>
+                <option value="OM4">OM4</option>
+                <option value="OM3">OM3</option>
+                <option value="OM2">OM2</option>
+                <option value="OM1">OM1</option>
+            </select>
+        </div>
+
+
+        <div class="form-section backbone-secundario">
+            <h3 id="bs">Backbone Secundário</h3>
+        
+            <label for="caboFibraSecundario">Especificação do cabo de fibra óptica secundário:</label>
+            <select id="caboFibraSecundario" name="caboFibraSecundario">
+                <option value="monomodo">Monomodo</option>
+            </select>
+            
+            <label for="paresFibrasSM">Número de pares de fibras que ficarão disponíveis no cabo óptico:</label>
+            <input type="number" id="paresFibrasSM" name="paresFibrasSM" min="0" value="0" required>
+
+            <label for="distanciaPredios">Distancia entre os prédios (m)</label>
+            <input type="number" id="distanciaPredios" name="distanciaPredios" min="0" value="0" required>
+        </div>
+
+        <button type="button" onclick="submitForm()" class="submit-btn">Enviar</button>
+    </div>
+
+    <script>
+        function toggleBackboneSecundario(isVisible) {
+            const secundarioSection = document.querySelector('.backbone-secundario');
+            const divprincipal = document.getElementById('divprincipal');
+            secundarioSection.style.display = isVisible ? 'block' : 'none';
+            divprincipal.style.width = "100%";
+
+            if(isVisible){
+                document.getElementById('paresFibrasSM').value = "";
+                document.getElementById('distanciaPredios').value = "";
+            }
+            else{
+                document.getElementById('paresFibrasSM').value = 0;
+                document.getElementById('distanciaPredios').value = 0;
+                divprincipal.style.width = "40%";
+            }
+        }
+
+        function toggleapenasBackbone(estado) {
+            //IDs dos elementos a serem alterados
+            const ids = ["labelDisciplinas", "divDisciplinas", "labelCategoria"];
+            const categoria = document.getElementById('categoria');
+            
+            ids.forEach(id => {
+                const elemento = document.getElementById(id);
+                if (elemento) {
+                    elemento.style.display = estado ? 'none' : 'block';
+                    elemento.value = estado ? '0' : elemento.value;
+                }
+                if(!estado){
+                    elemento.value = "";
+                }
+            });
+
+            if(!estado){
+                categoria.style.display = 'block';
+                categoria.value = "";
+            }
+            else {
+                document.querySelector('input[name="disciplinas"][value="0"]').click();
+                document.getElementById('totalTelecom').style.display = 'none';
+                document.getElementById('totalTelecom').value = 0;
+                document.getElementById('label-total').style.display = 'none';
+
+
+                
+                categoria.style.display = 'none';
+                categoria.value = "Cat5e";
+            }
+
+        }
+
+        function toggleDisciplinas(valor){
+            const dados = document.getElementById('dados');
+            const dadoslabel = document.getElementById('dadoslabel');
+            const cftv = document.getElementById('cftv');
+            const cftvlabel = document.getElementById('cftvlabel');
+            const voip = document.getElementById('voip');
+            const voiplabel = document.getElementById('voiplabel');
+
+            const labelTotal = document.getElementById('label-total');
+            const totalTelecom = document.getElementById('totalTelecom');
+
+            const displayStyle = valor ? 'block' : 'none';
+            if(valor){
+                totalTelecom.style.display = 'none';
+                labelTotal.style.display = 'none';
+                
+                dados.style.display = displayStyle;
+                dadoslabel.style.display = displayStyle;
+                cftv.style.display = displayStyle;
+                cftvlabel.style.display = displayStyle;
+                voip.style.display = displayStyle;
+                voiplabel.style.display = displayStyle;
+
+                dados.value = "";
+                cftv.value = "";
+                voip.value = "";
+                totalTelecom.value = 0;
+            }
+            else{
+                totalTelecom.style.display = 'block';
+                labelTotal.style.display = 'block';
+
+                dados.style.display = displayStyle;
+                dadoslabel.style.display = displayStyle;
+                cftv.style.display = displayStyle;
+                cftvlabel.style.display = displayStyle;
+                voip.style.display = displayStyle;
+                voiplabel.style.display = displayStyle;
+                
+                dados.value = 0;
+                cftv.value = 0;
+                voip.value = 0;
+                totalTelecom.value = "";
+            }
+        }
+
+        function toggleNPavimentos(show) {
+            const pavimentosLabel = document.getElementById('label-pavimentos');
+            const pavimentosInput = document.getElementById('pavimentos');
+            const dados = document.getElementById('dadoslabel');
+            const voip = document.getElementById('voiplabel');
+            const cftv = document.getElementById('cftvlabel');
+            const bac = document.getElementById('backboneprimarioexistente');
+            const divprincipal = document.getElementById('divprincipal');
+            const backboneprimario = document.getElementById('bp');
+            const backbonesecundario = document.getElementById('bs');
+            const labelapenasBackbone = document.getElementById('labelapenasBackbone');
+            const labeltotal = document.getElementById('label-total');
+
+            if (pavimentosLabel && pavimentosInput) {
+                const displayStyle = show ? 'block' : 'none';
+                pavimentosLabel.style.display = displayStyle;
+                pavimentosInput.style.display = displayStyle;
+                bac.style.display = displayStyle;
+                labelapenasBackbone.style.display = displayStyle;
+                divprincipal.style.width = "100%";
+                dados.innerText = "Quantidade de pontos de telecom para dados em cada andar:";
+                voip.innerText = "Quantidade de pontos de telecom para Voip em cada andar:";
+                cftv.innerText = "Quantidade de pontos de telecom para CFTV em cada andar:";
+                backboneprimario.innerText = "Backbone secundário";
+                backbonesecundario.innerText = "Backbone primário";
+                pavimentosInput.value = "2";
+            }
+                
+            if (!show) {
+                document.querySelector('input[name="apenasBackbone"][value="0"]').click();
+                pavimentosInput.value = 1; // Define o valor como 1 para "Andar único"
+                divprincipal.style.width = "40%";
+                dados.innerText = "Quantidade de pontos de dados no andar:";
+                voip.innerText = "Quantidade de pontos Voip no andar:";
+                cftv.innerText = "Quantidade de pontos CFTV no andar:";
+                
+                document.getElementById('paresFibras').value = 0;
+                document.getElementById('distanciaBackbone').value = 0;
+                labeltotal.innerText = "Total de pontos de telecom:";
+            }
+
+            if(show == true) {
+                document.getElementById('paresFibras').value = "";
+                document.getElementById('distanciaBackbone').value = "";
+                labeltotal.innerText = "Total de pontos de telecom em cada andar:";
+            }
+            
+        }
+
+        
+
+        function submitForm() {
+            const formElements = document.querySelectorAll('input[required], select[required]');
+            let allFilled = true;
+
+            formElements.forEach(element => {
+                if (!element.value) {
+                    allFilled = false;
+                    element.style.borderColor = 'red'; // Indica o campo não preenchido
+                } else {
+                    element.style.borderColor = '#ccc'; // Remove o destaque se estiver preenchido
+                }
+            });
+
+            if (allFilled) {
+                const data = {};
+                formElements.forEach(element => {
+                    data[element.name] = element.value;
+                });
+
+                
+                // Adiciona o valor do botão de rádio selecionado (andarunicooutipo)
+                const selectedRadio1 = document.querySelector('input[name="andarunicooutipo"]:checked');
+                if (selectedRadio1) {
+                    data['andarunicooutipo'] = selectedRadio1.value;
+                }
+
+                // Adiciona o valor do botão de rádio selecionado (apenasBackbone)
+                const selectedRadio2 = document.querySelector('input[name="apenasBackbone"]:checked');
+                if (selectedRadio1) {
+                    data['apenasBackbone'] = selectedRadio2.value;
+                }
+
+                const selectedRadio3 = document.querySelector('input[name="disciplinas"]:checked');
+                if(selectedRadio3.value == 0){
+                    data['dados'] = document.getElementById('totalTelecom').value;
+                }
+
+                // Adiciona o valor do botão de rádio selecionado (backboneExistente)
+                const selectedRadio = document.querySelector('input[name="backboneExistente"]:checked');
+                if (selectedRadio) {
+                    data['backboneExistente'] = selectedRadio.value;
+                }
+                
+
+                const queryString = new URLSearchParams(data).toString();
+                window.location.href = 'result.html?' + queryString;
+            } else {
+                alert("Por favor, preencha todos os campos obrigatórios.");
+            }
+
+        }
+    </script>
+</body>
+</html>
