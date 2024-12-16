@@ -148,10 +148,18 @@
                 nao serão contabilizador switches na automação
                 */
                 var racks = 0;
+                var exaustoresMalhaHorizontal = 0
+                var exaustoresBackbone = 0;
 
                 var numDVR = Math.ceil((data['cftv'])/48)*data['pavimentos'];
                 var tamRackTot = (Math.ceil(data['dados']/24) + Math.ceil(data['voip']/24) + Math.ceil(data['cftv']/48))*4 + Math.ceil(((Math.ceil(data['dados']/24) + Math.ceil(data['voip']/24) + Math.ceil(data['cftv']/48))*4)/2); //valor ja com o acrescimo de 50% e dvr com o tamanho de 2u
                 var tamUnidRack = 0;
+
+                if(data['rack'] == 1){ //numero de exaustores que serao necessarios caso o rack seje fechado
+                    exaustoresMalhaHorizontal += Math.ceil(tamRackTot/48);
+                }
+                tamRackTot += exaustoresMalhaHorizontal*2; //adiciona o numero de Us que serao necessarios para os exaustores
+
 
                 //calculo rack backbone primario (sera considerado o espaço para DIOS)
                 var tamRacksBackbonePrimario = Math.ceil(((data['pavimentos']-1) * (data['paresFibras'] * 2))/24) + (Math.ceil(Math.ceil(((data['pavimentos']-1) * data['paresFibras'] * 2)/24)/2));
@@ -204,8 +212,14 @@
                 var x = arrBackbone.toString().substr(arrBackbone.toString().length-3);
 
                 x = parseInt(x.slice(0, -1)); //ultimo hack da lista de racks dos andares tipo
+                
+                if(data['rack'] == 1 && data['andarunicooutipo'] == 1){
+                    exaustoresBackbone += Math.ceil((tamRacksBackbonePrimario-(48-x))/48);
+                }
 
-
+                var counter = 1;
+                var totalRacksBackboneComExaustoes = 0;
+    
                 while(true) {
                     if(x+tamRacksBackbonePrimario<=48) {
                         x+= tamRacksBackbonePrimario;
@@ -222,6 +236,7 @@
                             arrBackbone.push(" "+48+"u");
                             tamRacksBackbonePrimario -= 48-x;
                             x = 48;
+                            
                             continue;
                         }
                         else{
@@ -229,20 +244,20 @@
                                 arrBackbone.push(" "+48+"u");
                                 tamRacksBackbonePrimario -= 48;
                             }
-                            arrBackbone.push(" "+tamRacksBackbonePrimario+"u")
+                            totalRacksBackboneComExaustoes = tamRacksBackbonePrimario + exaustoresBackbone;
+                            for(;totalRacksBackboneComExaustoes%4!=0; totalRacksBackboneComExaustoes++){}
+                            arrBackbone.push(" "+(totalRacksBackboneComExaustoes)+"u");
                             break;
                         }
                     }
                 }
 
-                var exaustores = 0; //quantificacao de exaustores para os racks caso os racks estejam fechados, exaustores = 2u
-                if(data['rack'] == 1){
-                    exaustores += arrBackbone.length;
-                }
-                if(data['andarunicooutipo'] == 1){
-                    exaustores += arr.length*(data['pavimentos']-1);
-                }
+
                 
+                var stringExaustores = "";
+                if(data['rack'] == 1){
+                    stringExaustores = "Número de exaustores:" +(data['pavimentos']*exaustoresMalhaHorizontal)+exaustoresBackbone;
+                }
                 
                 
                 
@@ -393,10 +408,10 @@
                         `Cordão de Ligação, flexível, (Patch Cable), (categoria ${data['categoria']}), (Tamanho: 2m), (cor: amarelo): ${cordaoPatchCableAmarelo} unidade(s)`,
                         `Cordão de Ligação, flexível, (Patch Cable), (categoria ${data['categoria']}), (Tamanho: 2m), (cor: vermelho): ${cordaoPatchCableVermelho} unidade(s)`,
 
-                        `Rack(s) (${fechadoouaberto}) = ${arr.length*data['pavimentos']} unidade(s)`, 
+                        `Rack(s) (${fechadoouaberto}) = ${arr.length*(data['pavimentos']-1)+arrBackbone.length} unidade(s)`, 
                         `${existenciaAndarTipo}`,
                         `${configAndarBackbone}`,
-                        `Número de exaustores: ${exaustores}`,
+                        `Número de exaustores: ${(data['pavimentos']*exaustoresMalhaHorizontal)+exaustoresBackbone}`,
 
                         `Organizador lateral para Rack (Para os tamanhos correspondentes): ${organizadoresLaterais} unidade(s)`,
                         `Bandeja fixa - 19" de largura: ${bandejasFixas} unidade(s)`,
