@@ -149,6 +149,7 @@
                 */
                 var racks = 0;
                 var exaustoresMalhaHorizontal = 0
+                var x = 0; //variavel reserva de exaustoresMalhaHorizontal
                 var exaustoresBackbone = 0;
 
                 var numDVR = Math.ceil((data['cftv'])/48)*data['pavimentos'];
@@ -161,6 +162,15 @@
                     exaustoresMalhaHorizontal += Math.ceil(tamRackTot/48);
                 }
                 tamRackTot += exaustoresMalhaHorizontal*2; //adiciona o numero de Us que serao necessarios para os exaustores
+
+
+                if(Math.ceil(tamRackTot/48) > exaustoresMalhaHorizontal){ //verifica se a adição de exaustores gerou mais algun(s) rack(s), para adicionar mais exaustor(es) para o(s) novo(s) rack
+                    x = exaustoresMalhaHorizontal; //variavel reserva para calcular a diferença do antigo e o novo valor de exaustoresMalhaHorizontal
+                    exaustoresMalhaHorizontal += Math.ceil(tamRackTot/48) - exaustoresMalhaHorizontal;
+                    tamRackTot -= x*2;
+                    tamRackTot += exaustoresMalhaHorizontal*2;
+                }
+                
 
 
                 //calculo rack backbone primario (sera considerado o espaço para DIOS)
@@ -259,6 +269,7 @@
                 if(data['rack'] == 1){
                     stringExaustores = "Número de exaustores: "+((data['pavimentos']*exaustoresMalhaHorizontal)+exaustoresBackbone);
                 }
+                
                 
                 
                 
