@@ -217,7 +217,6 @@
                     exaustoresBackbone += Math.ceil((tamRacksBackbonePrimario-(48-x))/48);
                 }
 
-                var counter = 1;
                 var totalRacksBackboneComExaustoes = 0;
     
                 while(true) {
@@ -276,7 +275,10 @@
                 if(data['rack'] == '1'){ //se o rack estiver fechado
                     organizadoresLaterais = 0;
                 }
-
+                if(data['andarunicooutipo'] == 0){
+                    for(;tamRackTot%4!=0;tamRackTot++){}
+                }
+                
                 var bandejasFixas = racks*data['pavimentos'];
                 var bandejasDeslizantes = numDVR; //um para cada dvr
                 var parafusoPorcaGaiola = Math.ceil(((tamRackTot+tamRacksBackbonePrimario)*4*data['pavimentos'])/10);
