@@ -244,7 +244,7 @@
                                 arrBackbone.push(" "+48+"u");
                                 tamRacksBackbonePrimario -= 48;
                             }
-                            totalRacksBackboneComExaustoes = tamRacksBackbonePrimario + exaustoresBackbone;
+                            totalRacksBackboneComExaustoes = tamRacksBackbonePrimario + (exaustoresBackbone*2);
                             for(;totalRacksBackboneComExaustoes%4!=0; totalRacksBackboneComExaustoes++){}
                             arrBackbone.push(" "+(totalRacksBackboneComExaustoes)+"u");
                             break;
@@ -256,7 +256,7 @@
                 
                 var stringExaustores = "";
                 if(data['rack'] == 1){
-                    stringExaustores = "Número de exaustores:" +(data['pavimentos']*exaustoresMalhaHorizontal)+exaustoresBackbone;
+                    stringExaustores = "Número de exaustores: "+((data['pavimentos']*exaustoresMalhaHorizontal)+exaustoresBackbone);
                 }
                 
                 
@@ -411,7 +411,7 @@
                         `Rack(s) (${fechadoouaberto}) = ${arr.length*(data['pavimentos']-1)+arrBackbone.length} unidade(s)`, 
                         `${existenciaAndarTipo}`,
                         `${configAndarBackbone}`,
-                        `Número de exaustores: ${(data['pavimentos']*exaustoresMalhaHorizontal)+exaustoresBackbone}`,
+                        `${stringExaustores}`,
 
                         `Organizador lateral para Rack (Para os tamanhos correspondentes): ${organizadoresLaterais} unidade(s)`,
                         `Bandeja fixa - 19" de largura: ${bandejasFixas} unidade(s)`,
