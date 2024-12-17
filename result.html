@@ -152,7 +152,9 @@
                 var exaustoresBackbone = 0;
 
                 var numDVR = Math.ceil((data['cftv'])/48)*data['pavimentos'];
-                var tamRackTot = (Math.ceil(data['dados']/24) + Math.ceil(data['voip']/24) + Math.ceil(data['cftv']/48))*4 + Math.ceil(((Math.ceil(data['dados']/24) + Math.ceil(data['voip']/24) + Math.ceil(data['cftv']/48))*4)/2); //valor ja com o acrescimo de 50% e dvr com o tamanho de 2u
+                
+                //total de unidades (u) que serão necessario para o calculo dos racks (considerações: patch panels, switches, organizadores frontais e DVRs)
+                var tamRackTot = ((Math.ceil(data['dados']/24) + Math.ceil(data['voip']/24) + Math.ceil(data['cftv']/24))*4 + (Math.ceil(data['cftv']/48))) + Math.ceil(((Math.ceil(data['dados']/24) + Math.ceil(data['voip']/24) + Math.ceil(data['cftv']/24))*4 + (Math.ceil(data['cftv']/48)))/2); //valor ja com o acrescimo de 50% e dvr com o tamanho de 2u
                 var tamUnidRack = 0;
 
                 if(data['rack'] == 1){ //numero de exaustores que serao necessarios caso o rack seje fechado
