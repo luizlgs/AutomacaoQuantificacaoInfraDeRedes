@@ -130,7 +130,7 @@
             <label for="voip" id="voiplabel" style="display: none;">Quantidade de telecom para Voip no andar:</label>
             <input type="number" id="voip" name="voip" min="0" style="display: none;" value=0 required>
 
-            <label for="distanciaMH">Medida básica para cálculo da distância da MH:</label>
+            <label for="distanciaMH" id="distanciaMHLabel">Medida básica para cálculo da distância da MH:</label>
             <input type="number" id="distanciaMH" name="distanciaMH" min="0" required>
 
             <label for="categoria" id="labelCategoria">Especificação de categoria:</label>
@@ -143,7 +143,7 @@
                 <option value="Cat7">Cat7</option>
             </select>
 
-            <label for="rack">Rack está protegido?</label>
+            <label for="rack" id="labelRack">Rack está protegido?</label>
             <select id="rack" name="rack" required>
                 <option value="">Selecione</option>
                 <option value=1>Sim</option>
@@ -238,8 +238,20 @@
             if(!estado){
                 categoria.style.display = 'block';
                 categoria.value = "";
+                document.getElementById('rack').style.display = 'block';
+                document.getElementById('labelRack').style.display = 'block';
+                document.getElementById('rack').value = "";
+                document.getElementById('distanciaMH').style.display = 'block';
+                document.getElementById('distanciaMH').value = '';
+                document.getElementById('distanciaMHLabel').style.display = 'block';
             }
             else {
+                document.getElementById('distanciaMH').style.display = 'none';
+                document.getElementById('distanciaMH').value = 0;
+                document.getElementById('distanciaMHLabel').style.display = 'none';
+                document.getElementById('rack').style.display = 'none';
+                document.getElementById('rack').value = 0;
+                document.getElementById('labelRack').style.display = 'none';
                 document.querySelector('input[name="disciplinas"][value="0"]').click();
                 document.getElementById('totalTelecom').style.display = 'none';
                 document.getElementById('totalTelecom').value = 0;
