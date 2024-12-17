@@ -238,20 +238,28 @@
             if(!estado){
                 categoria.style.display = 'block';
                 categoria.value = "";
+
+                //rack aberto/fechado
                 document.getElementById('rack').style.display = 'block';
                 document.getElementById('labelRack').style.display = 'block';
                 document.getElementById('rack').value = "";
+
+                //distancia malha horizontal
                 document.getElementById('distanciaMH').style.display = 'block';
                 document.getElementById('distanciaMH').value = '';
                 document.getElementById('distanciaMHLabel').style.display = 'block';
             }
             else {
+                //distancia malha horizontal
                 document.getElementById('distanciaMH').style.display = 'none';
                 document.getElementById('distanciaMH').value = 0;
                 document.getElementById('distanciaMHLabel').style.display = 'none';
+
+                //rack aberto/fechado
                 document.getElementById('rack').style.display = 'none';
                 document.getElementById('rack').value = 0;
                 document.getElementById('labelRack').style.display = 'none';
+
                 document.querySelector('input[name="disciplinas"][value="0"]').click();
                 document.getElementById('totalTelecom').style.display = 'none';
                 document.getElementById('totalTelecom').value = 0;
